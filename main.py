@@ -30,8 +30,16 @@ async def handler(client,message):
       else:
         timeframe='1h'
       
-      gift_text=spot.klines(currency,timeframe)
-      print(gift_text)
+      # gift_text=spot.klines(currency,timeframe)
+      coin_info=spot.get_symbol_ticker(symbol=currency)
+      
+      price = coin_info['price']
+      price_change_percentage = coin_info['priceChangePercent']
+      high_price = coin_info['highPrice']
+      low_price = coin_info['lowPrice']
+      volume = coin_info['volume']
+      
+      gift_text = f"Price: {price}\n24H Change: {price_change_percentage}%\nHigh: {high_price}\nLow: {low_price}\n24H Vol: {volume}"
       await client.send_message(chat_id=message.chat.id,text="accepted")  
 
 
