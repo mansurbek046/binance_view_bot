@@ -18,7 +18,7 @@ async def start(client,message):
 async def handler(client,message):
   message_text=message.text
   if message_text:
-    await client.send_message(chat_id=message.chat.id,text=spot.time())
+    # await client.send_message(chat_id=message.chat.id,text=spot.time())
     gift_text=spot.klines(message_text,'1h')
     await client.send_message(chat_id=message.chat.id,text=gift_text)  
 
