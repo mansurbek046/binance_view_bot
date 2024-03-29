@@ -19,8 +19,18 @@ async def handler(client,message):
   message_text=message.text
   if message_text:
     # await client.send_message(chat_id=message.chat.id,text=spot.time())
-    gift_text=spot.klines(message_text,'1h')
-    await client.send_message(chat_id=message.chat.id,text=gift_text)  
+    message_text=message_text.split()
+    if message_text[0]:
+      currency=message_text[0].upper()
+      if not currency.endswith('USDT'):
+        currency+='USDT'
+      timeframe=message_text[1]
+      if not timeframe:
+        timeframe='1h'
+      
+      gift_text=spot.klines(message_text,timeframe)
+      print(gift_text)
+      await client.send_message(chat_id=message.chat.id,text="accepted")  
 
 
 if __name__=="__main__":
