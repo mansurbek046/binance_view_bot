@@ -25,7 +25,7 @@ async def handler(client,message):
       if not currency.endswith('USDT'):
         currency+='USDT'
       
-      if len(message_text)=>2:
+      if len(message_text)>=2:
         timeframe=message_text[1]
       else:
         timeframe='1h'
