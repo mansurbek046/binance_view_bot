@@ -23,7 +23,8 @@ async def handler(client,message):
     await client.send_message(chat_id=message.chat.id,text=gift_text)  
 
 
-
+if __name__=="__main__":
+  app.run()
 
 
 
