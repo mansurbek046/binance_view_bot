@@ -40,7 +40,7 @@ async def handler(client,message):
       volume = coin_info['volume']
       
       gift_text = f"Price: {price}\n24H Change: {price_change_percentage}%\nHigh: {high_price}\nLow: {low_price}\n24H Vol: {volume}"
-      await client.send_message(chat_id=message.chat.id,text="accepted")  
+      await client.send_message(chat_id=message.chat.id,text=gift_text)
 
 
 if __name__=="__main__":
