@@ -1,6 +1,8 @@
 import logging
 from pyrogram import Client, filters
 from binance.spot import Spot
+import requests
+import json
 
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
@@ -31,15 +33,17 @@ async def handler(client,message):
         timeframe='1h'
       
       # gift_text=spot.klines(currency,timeframe)
-      coin_info=spot.get_symbol_ticker(symbol=currency)
       
-      price = coin_info['price']
-      price_change_percentage = coin_info['priceChangePercent']
-      high_price = coin_info['highPrice']
-      low_price = coin_info['lowPrice']
-      volume = coin_info['volume']
+      url = f'https://api.binance.com/api/v3/ticker/24hr?symbol={currency}'
       
-      gift_text = f"Price: {price}\n24H Change: {price_change_percentage}%\nHigh: {high_price}\nLow: {low_price}\n24H Vol: {volume}"
+      
+      res=requests.get(url)
+      if res.status_code==200:
+        data=res.json()
+        gift_text=json.dumps(data, indent=2)
+      
+      print(gift_text)      
+      
       await client.send_message(chat_id=message.chat.id,text=gift_text)
 
 
