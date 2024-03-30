@@ -17,15 +17,15 @@ CHANNEL_ID=-1002143083883
 
 @app.on_message(filters.command('start'))
 async def start(client,message):
-  if not bot.get_chat_member(CHANNEL_ID, message.from_user.id).status in ["member", "administrator"]:
+  if not client.get_chat_member(CHANNEL_ID, message.from_user.id).status in ["member", "administrator"]:
     message.reply_text("Please join our channel to use bot.")
   else:
     await client.send_message(chat_id=message.chat.id,text="Send me coin name..")
 
 @app.on_message()
 async def handler(client,message):
-  print(message)
-  if not bot.get_chat_member(CHANNEL_ID, message.from_user.id).status in ["member", "administrator"]:
+
+  if not client.get_chat_member(CHANNEL_ID, message.from_user.id).status in ["member", "administrator"]:
     message.reply_text("Please join our channel to use bot.")
   else:
     message_text=message.text
@@ -74,12 +74,10 @@ async def handler(client,message):
   
           await client.send_message(chat_id=message.chat.id,text=gift_text,reply_markup=reply_markup)
 
-@app.on_channel_chat()
-def channel_join_handler(bot, msg: Message):
-    if msg.new_chat_members and msg.chat.id == CHANNEL_ID:
-        for member in msg.new_chat_members:
-            if member.id == bot.get_me().id:
-                bot.send_message(msg.chat.id, "Thanks for joining our channel! You can use bot now.")
+@app.on_chat_member()
+def channel_join_handler(client, chat_member: ChatMember):
+    if chat_member.user.id == client.get_me().id and chat_member.new_chat_member.status in ["member", "administrator"]:
+      client.send_message(msg.chat.id, "Thanks for joining our channel! You can use bot now.")
 
 if __name__=="__main__":
   app.run()
