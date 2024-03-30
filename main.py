@@ -43,12 +43,12 @@ async def handler(client,message):
         data=res.json()
         # gift_text=json.dumps(data, indent=2)
         
-        symbol=data['symbol']
-        price = data['lastPrice']
-        change_percentage = data['priceChangePercent']
-        high_price = data['highPrice']
-        low_price = data['lowPrice']
-        volume = data['volume']
+        symbol = data['symbol']
+        price = float(data['lastPrice'])
+        change_percentage = float(data['priceChangePercent'])
+        high_price = float(data['highPrice'])
+        low_price = float(data['lowPrice'])
+        volume = float(data['volume'])
         
         gift_text = f"{symbol} Market\n\n💰 Price: {price:,.2f}\n🫰 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}"
       await client.send_message(chat_id=message.chat.id,text=gift_text)
