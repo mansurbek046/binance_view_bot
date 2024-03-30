@@ -49,8 +49,8 @@ async def handler(client,message):
         low_price = data['lowPrice']
         volume = data['volume']
         
-        gift_text=f"{symbol} Market\n\n💰 Price: {price}🫰 \n24H Change: {change_percentage⬆ }%\nHigh: {high_pric⬇️ e}\nLow: {low_pric📊 e}\n24H Volume: {volume}"
-      
+        gift_text=f"{symbol} Market\n\n💰 Price: {price}🫰 \n24H Change: {change_percentage}%\n⬆ High: {high_price}\n⬇️ Low: {low_price}\n📊 24H Volume: {volume}"
+
       print(gift_text)
       
       await client.send_message(chat_id=message.chat.id,text=gift_text)
