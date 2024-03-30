@@ -40,9 +40,18 @@ async def handler(client,message):
       res=requests.get(url)
       if res.status_code==200:
         data=res.json()
-        gift_text=json.dumps(data, indent=2)
+        # gift_text=json.dumps(data, indent=2)
+        
+        symbol=data['symbol']
+        price = data['lastPrice']
+        change_percentage = data['priceChangePercent']
+        high_price = data['highPrice']
+        low_price = data['lowPrice']
+        volume = data['volume']
+        
+        gift_text=f"{symbol} Market\n\n💰 Price: {price}🫰 \n24H Change: {change_percentage⬆ }%\nHigh: {high_pric⬇️ e}\nLow: {low_pric📊 e}\n24H Volume: {volume}"
       
-      print(gift_text)      
+      print(gift_text)
       
       await client.send_message(chat_id=message.chat.id,text=gift_text)
 
