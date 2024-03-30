@@ -5,6 +5,7 @@ import requests
 import json
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from pyrogram.errors import UserNotParticipant
+import asyncio
 
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
@@ -15,6 +16,25 @@ app=Client('binance_view_bot',api_hash=api_hash,api_id=api_id,bot_token=bot_toke
 spot=Spot()
 
 CHANNEL_ID=-1002143083883
+
+async def price_alert(symbol, price, chat_id, client):
+  while True:
+    
+    if not symbol.endswith('USDT'):
+      symbol+='USDT'
+    
+    price=float(price.replace(',',''))
+    
+    url=f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"
+    
+    res=requests.get(url)
+    if res.status_code==200:
+      data=res.json()
+      if float(data["price"])>=price:
+        await client.send_message(chat_id=chat_id, text="<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
+        break
+
+    asyncio.sleep(20)
 
 @app.on_message(filters.command('start'))
 async def start(client,message):
@@ -27,6 +47,9 @@ async def start(client,message):
   except UserNotParticipant:
     await message.reply_text("Please join our channel and /start again to use bot.")
 
+@app.on_message(filters.command('set'))
+  message_text=message.text.split(' ')
+  asyncio.create_task(price_alert(message_text[1],message_text[2]))
 
 @app.on_message()
 async def handler(client,message):
@@ -39,7 +62,6 @@ async def handler(client,message):
       message_text=message.text
       gift_text=""
       if message_text:
-        # await client.send_message(chat_id=message.chat.id,text=spot.time())
         message_text=message_text.split()
         if message_text[0]:
           currency=message_text[0].upper()
@@ -50,15 +72,12 @@ async def handler(client,message):
             timeframe=message_text[1]
           else:
             timeframe='1h'
-          
-          # gift_text=spot.klines(currency,timeframe)
-          
+
           url = f'https://api.binance.com/api/v3/ticker/24hr?symbol={currency}'
     
           res=requests.get(url)
           if res.status_code==200:
             data=res.json()
-            # gift_text=json.dumps(data, indent=2)
             up="📈"
             down="📉"
         
@@ -85,7 +104,9 @@ async def handler(client,message):
   except UserNotParticipant:
     await message.reply_text("Please join our channel and /start again to use bot.")
 
+
+
+
 if __name__=="__main__":
   app.run()
-
 
