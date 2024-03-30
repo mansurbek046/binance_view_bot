@@ -13,59 +13,73 @@ bot_token='7074408130:AAHrKKZend7i3PUBjI3sr2bW4iVPDZvFJ18'
 app=Client('binance_view_bot',api_hash=api_hash,api_id=api_id,bot_token=bot_token)
 spot=Spot()
 
+CHANNEL_ID=-1002143083883
+
 @app.on_message(filters.command('start'))
 async def start(client,message):
-  await client.send_message(chat_id=message.chat.id,text="Send me coin name..")
+  if not bot.get_chat_member(CHANNEL_ID, message.from_user.id).status in ["member", "administrator"]:
+    message.reply_text("Please join our channel to use bot.")
+  else:
+    await client.send_message(chat_id=message.chat.id,text="Send me coin name..")
 
 @app.on_message()
 async def handler(client,message):
   print(message)
-  message_text=message.text
-  gift_text=""
-  if message_text:
-    # await client.send_message(chat_id=message.chat.id,text=spot.time())
-    message_text=message_text.split()
-    if message_text[0]:
-      currency=message_text[0].upper()
-      if not currency.endswith('USDT'):
-        currency+='USDT'
-      
-      if len(message_text)>=2:
-        timeframe=message_text[1]
-      else:
-        timeframe='1h'
-      
-      # gift_text=spot.klines(currency,timeframe)
-      
-      url = f'https://api.binance.com/api/v3/ticker/24hr?symbol={currency}'
-
-      res=requests.get(url)
-      if res.status_code==200:
-        data=res.json()
-        # gift_text=json.dumps(data, indent=2)
-        up="📈"
-        down="📉"
-    
-        symbol = data['symbol']
-        price = float(data['lastPrice'])
-        change_percentage = float(data['priceChangePercent'])
-        high_price = float(data['highPrice'])
-        low_price = float(data['lowPrice'])
-        volume = float(data['volume'])
+  if not bot.get_chat_member(CHANNEL_ID, message.from_user.id).status in ["member", "administrator"]:
+    message.reply_text("Please join our channel to use bot.")
+  else:
+    message_text=message.text
+    gift_text=""
+    if message_text:
+      # await client.send_message(chat_id=message.chat.id,text=spot.time())
+      message_text=message_text.split()
+      if message_text[0]:
+        currency=message_text[0].upper()
+        if not currency.endswith('USDT'):
+          currency+='USDT'
         
-        status_icon=up
-        if change_percentage<0:
-          status_icon=down
+        if len(message_text)>=2:
+          timeframe=message_text[1]
+        else:
+          timeframe='1h'
+        
+        # gift_text=spot.klines(currency,timeframe)
+        
+        url = f'https://api.binance.com/api/v3/ticker/24hr?symbol={currency}'
+  
+        res=requests.get(url)
+        if res.status_code==200:
+          data=res.json()
+          # gift_text=json.dumps(data, indent=2)
+          up="📈"
+          down="📉"
+      
+          symbol = data['symbol']
+          price = float(data['lastPrice'])
+          change_percentage = float(data['priceChangePercent'])
+          high_price = float(data['highPrice'])
+          low_price = float(data['lowPrice'])
+          volume = float(data['volume'])
+          
+          status_icon=up
+          if change_percentage<0:
+            status_icon=down
+  
+          gift_text = f"{symbol} Market\n\n💰 Price: {price:,.2f}\n{status_icon} 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}"
+  
+          reply_markup=InlineKeyboardMarkup([[
+            InlineKeyboardButton("💰 Binance", web_app=WebAppInfo(url=f"https://www.binance.com/en/trade/{currency}")),
+            InlineKeyboardButton("TradingView 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}"))
+            ]])
+  
+          await client.send_message(chat_id=message.chat.id,text=gift_text,reply_markup=reply_markup)
 
-        gift_text = f"{symbol} Market\n\n💰 Price: {price:,.2f}\n{status_icon} 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}"
-
-        reply_markup=InlineKeyboardMarkup([[
-          InlineKeyboardButton("TradingView 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}")),
-          InlineKeyboardButton("💰 Binance", web_app=WebAppInfo(url=f"https://www.binance.com/en/trade/{currency}")),
-          ]])
-
-        await client.send_message(chat_id=message.chat.id,text=gift_text,reply_markup=reply_markup)
-
+@app.on_channel_chat()
+def channel_join_handler(bot, msg: Message):
+    if msg.new_chat_members and msg.chat.id == CHANNEL_ID:
+        for member in msg.new_chat_members:
+            if member.id == bot.get_me().id:
+                bot.send_message(msg.chat.id, "Thanks for joining our channel! You can use bot now.")
 
 if __name__=="__main__":
   app.run()
