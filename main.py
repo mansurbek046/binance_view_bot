@@ -19,6 +19,7 @@ async def start(client,message):
 
 @app.on_message()
 async def handler(client,message):
+  print(message)
   message_text=message.text
   gift_text=""
   if message_text:
@@ -56,10 +57,13 @@ async def handler(client,message):
         if change_percentage<0:
           status_icon=down
 
-        gift_text = f"{symbol} Market\n\n💰 Price: {price:,.2f}\n🫰 24H Change: {change_percentage:.2f}% {status_icon}\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}"
-      
-        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("View 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}"))]])
-      
+        gift_text = f"{symbol} Market\n\n💰 Price: {price:,.2f}\n{status_icon} 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}"
+
+        reply_markup=InlineKeyboardMarkup([[
+          InlineKeyboardButton("TradingView 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}")),
+          InlineKeyboardButton("💰 Binance", web_app=WebAppInfo(url=f"https://www.binance.com/en/trade/{currency}")),
+          ]])
+
         await client.send_message(chat_id=message.chat.id,text=gift_text,reply_markup=reply_markup)
 
 
