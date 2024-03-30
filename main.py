@@ -33,7 +33,7 @@ async def handler(client,message):
   try:
     member=await client.get_chat_member(CHANNEL_ID, message.from_user.id)
     print(member)
-    if not member["status"]!="ChatMemberStatus.MEMBER":
+    if not member.status!="ChatMemberStatus.MEMBER":
       await message.reply_text("Please join our channel and /start again to use bot.")
     else:
       message_text=message.text
