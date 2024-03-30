@@ -21,7 +21,7 @@ async def start(client,message):
   try:
     member=await client.get_chat_member(CHANNEL_ID, message.from_user.id)
     if not member.status in ["member", "administrator"]:
-      message.reply_text("Please join our channel and /start again to use bot.")
+      await message.reply_text("Please join our channel and /start again to use bot.")
     else:
       await client.send_message(chat_id=message.chat.id,text="Send me coin name..")
   except UserNotParticipant:
@@ -34,7 +34,7 @@ async def handler(client,message):
     member=await client.get_chat_member(CHANNEL_ID, message.from_user.id)
   
     if not member.status in ["member", "administrator"]:
-      message.reply_text("Please join our channel and /start again to use bot.")
+      await message.reply_text("Please join our channel and /start again to use bot.")
     else:
       message_text=message.text
       gift_text=""
