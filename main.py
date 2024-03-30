@@ -48,8 +48,9 @@ async def start(client,message):
     await message.reply_text("Please join our channel and /start again to use bot.")
 
 @app.on_message(filters.command('set'))
+async def set_alert(client,message):
   message_text=message.text.split(' ')
-  asyncio.create_task(price_alert(message_text[1],message_text[2]))
+  asyncio.create_task(price_alert(message_text[1],message_text[2],message.chat.id,client))
 
 @app.on_message()
 async def handler(client,message):
