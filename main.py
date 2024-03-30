@@ -4,6 +4,7 @@ from binance.spot import Spot
 import requests
 import json
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+from pyrogram.errors import UserNotParticipant
 
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
