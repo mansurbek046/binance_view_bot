@@ -19,6 +19,7 @@ async def start(client,message):
 @app.on_message()
 async def handler(client,message):
   message_text=message.text
+  gift_text=""
   if message_text:
     # await client.send_message(chat_id=message.chat.id,text=spot.time())
     message_text=message_text.split()
