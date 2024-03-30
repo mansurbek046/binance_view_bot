@@ -3,6 +3,7 @@ from pyrogram import Client, filters
 from binance.spot import Spot
 import requests
 import json
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
@@ -36,13 +37,14 @@ async def handler(client,message):
       # gift_text=spot.klines(currency,timeframe)
       
       url = f'https://api.binance.com/api/v3/ticker/24hr?symbol={currency}'
-      
-      
+
       res=requests.get(url)
       if res.status_code==200:
         data=res.json()
         # gift_text=json.dumps(data, indent=2)
-        
+        up="📈"
+        down="📉"
+    
         symbol = data['symbol']
         price = float(data['lastPrice'])
         change_percentage = float(data['priceChangePercent'])
@@ -50,12 +52,18 @@ async def handler(client,message):
         low_price = float(data['lowPrice'])
         volume = float(data['volume'])
         
-        gift_text = f"{symbol} Market\n\n💰 Price: {price:,.2f}\n🫰 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}"
-      await client.send_message(chat_id=message.chat.id,text=gift_text)
+        status_icon=up
+        if change_percentage<0:
+          status_icon=down
+
+        gift_text = f"{symbol} Market\n\n💰 Price: {price:,.2f}\n🫰 24H Change: {change_percentage:.2f}% {status_icon}\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}"
+      
+        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("View 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}"))]])
+      
+        await client.send_message(chat_id=message.chat.id,text=gift_text,reply_markup=reply_markup)
 
 
 if __name__=="__main__":
   app.run()
-
 
 
