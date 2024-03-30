@@ -34,7 +34,7 @@ async def price_alert(symbol, price, chat_id, client):
         await client.send_message(chat_id=chat_id, text="<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
 
-    asyncio.sleep(20)
+    await asyncio.sleep(20)
 
 @app.on_message(filters.command('start'))
 async def start(client,message):
