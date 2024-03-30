@@ -23,7 +23,7 @@ async def price_alert(symbol, price, chat_id, client):
     if not symbol.endswith('USDT'):
       symbol+='USDT'
     
-    price=float(price.replace(',',''))
+    price=float(str(price).replace(',',''))
     
     url=f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"
     
