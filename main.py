@@ -7,9 +7,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInf
 from pyrogram.errors import UserNotParticipant
 import asyncio
 from datetime import datetime, timedelta
-from pyrogram.types import InputTextMessageEntity
-from pyrogram.raw import functions
-from pyrogram.raw.types import InputMessageEntityMentionName
+from pyrogram.types import MessageEntity
 
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
@@ -25,7 +23,7 @@ nonadmin="<b>Permission denied!</b>\n\n"
 
 ad_text="Put your ads here\n <a href='kun.uz'>Read more...</a>"
 
-entity = InputTextMessageEntity(offset=0, length=len(ad_text), type="blockquote")
+entity = MessageEntity(type="blockquote", offset=0, length=len(ad_text))
 
 def get_date(days_to_add):
     current_date = datetime.now()
