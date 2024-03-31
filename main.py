@@ -18,7 +18,7 @@ spot=Spot()
 CHANNEL_ID=-1002143083883
 
 async def price_alert(symbol, price, chat_id, client):
-  await client.send_message(chat_id=chat_id, text=f"✅ Alert added: {symbol.upper()} {price} USDT")
+  await client.send_message(chat_id=chat_id, text=f"✅ Alert added:\n{symbol.upper()} {price} USDT")
   while True:
     
     if not symbol.endswith('USDT'):
@@ -29,6 +29,7 @@ async def price_alert(symbol, price, chat_id, client):
     url=f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"
     
     res=requests.get(url)
+    print(res)
     if res.status_code==200:
       data=res.json()
       print(float(data["price"]),1000000,price)
