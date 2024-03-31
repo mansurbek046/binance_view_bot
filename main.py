@@ -25,7 +25,7 @@ async def price_alert(symbol, price, chat_id, client):
       symbol+='USDT'
     
     price=float(str(price).replace(',',''))
-    
+    print(symbol)
     url=f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"
     
     res=requests.get(url)
@@ -53,7 +53,7 @@ async def start(client,message):
 @app.on_message(filters.command('set'))
 async def set_alert(client,message):
   message_text=message.text.split(' ')
-  asyncio.create_task(price_alert(message_text[1],message_text[2],message.chat.id,client))
+  asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message.chat.id,client))
 
 @app.on_message()
 async def handler(client,message):
