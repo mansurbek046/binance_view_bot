@@ -18,6 +18,7 @@ spot=Spot()
 CHANNEL_ID=-1002143083883
 
 async def price_alert(symbol, price, chat_id, client):
+  client.send_message(chat_id=chat_id, text=f"✅ Alert added: {symbol.upper()} {price} USDT")
   while True:
     
     if not symbol.endswith('USDT'):
