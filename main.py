@@ -6,6 +6,8 @@ import json
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from pyrogram.errors import UserNotParticipant
 import asyncio
+from datetime import datetime, timedelta
+
 
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
@@ -16,9 +18,17 @@ app=Client('binance_view_bot',api_hash=api_hash,api_id=api_id,bot_token=bot_toke
 spot=Spot()
 
 CHANNEL_ID=-1002143083883
+owner=6045995371
+nonadmin="<b>Permission denied!</b>\n\n<blockquote>Put your ads here\n <a href='kun.uz'>Read more...</a></blockquote>"
+
+def get_date(days_to_add):
+    current_date = datetime.now()
+    future_date = current_date + timedelta(days=days_to_add)
+    future_date_str = future_date.strftime('%d.%m.%Y')
+    return future_date_str
 
 async def price_alert(symbol, type_, price, chat_id, client):
-  await client.send_message(chat_id=chat_id, text=f"✅ <b><u>{type_.upper()}</u> Alert added</b>:\n{symbol.upper()} {price} USDT")
+  await client.send_message(chat_id=chat_id, text=f"✅ <b>Alert added</b>:\n{symbol.upper()} {price} USDT")
   while True:
     
     if not symbol.endswith('USDT'):
@@ -61,6 +71,27 @@ async def start(client,message):
 async def set_alert(client,message):
   message_text=message.text.split(' ')
   asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message_text[3],message.chat.id,client))
+
+@app.on_message(filters.command('ad'))
+async def ad(client,message):
+  if message.from_user.id==owner:
+    pass
+  else:
+    client.send_message(chat_id=message.chat.id, text=nonadmin)
+
+@app.on_message(filters.command('rm'))
+async def ad(client,message):
+  if message.from_user.id==owner:
+    pass
+  else:
+    client.send_message(chat_id=message.chat.id, text=nonadmin)
+
+@app.on_message(filters.command('ads'))
+async def ad(client,message):
+  if message.from_user.id==owner:
+    pass
+  else:
+    client.send_message(chat_id=message.chat.id, text=nonadmin)
 
 @app.on_message()
 async def handler(client,message):
