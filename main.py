@@ -30,6 +30,7 @@ async def price_alert(symbol, price, chat_id, client):
     res=requests.get(url)
     if res.status_code==200:
       data=res.json()
+      print(float(data["price"]),1000000,price)
       if float(data["price"])>=price:
         await client.send_message(chat_id=chat_id, text="<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
