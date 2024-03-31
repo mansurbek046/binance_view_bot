@@ -7,7 +7,9 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInf
 from pyrogram.errors import UserNotParticipant
 import asyncio
 from datetime import datetime, timedelta
-
+from pyrogram.types import InputTextMessageEntity
+from pyrogram.raw import functions
+from pyrogram.raw.types import InputMessageEntityMentionName
 
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
@@ -19,7 +21,11 @@ spot=Spot()
 
 CHANNEL_ID=-1002143083883
 owner=6045995371
-nonadmin="<b>Permission denied!</b>\n\n>Put your ads here\n <a href='kun.uz'>Read more...</a>"
+nonadmin="<b>Permission denied!</b>\n\n"
+
+ad_text="Put your ads here\n <a href='kun.uz'>Read more...</a>"
+
+entity = InputTextMessageEntity(offset=0, length=len(ad_text), type="blockquote")
 
 def get_date(days_to_add):
     current_date = datetime.now()
@@ -77,21 +83,21 @@ async def ad(client,message):
   if message.from_user.id==owner:
     pass
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin, entities=[entity])
 
 @app.on_message(filters.command('rm'))
 async def ad(client,message):
   if message.from_user.id==owner:
     pass
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin, entities=[entity])
 
 @app.on_message(filters.command('ads'))
 async def ad(client,message):
   if message.from_user.id==owner:
     pass
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin, entities=[entity])
 
 @app.on_message()
 async def handler(client,message):
