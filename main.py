@@ -77,21 +77,21 @@ async def ad(client,message):
   if message.from_user.id==owner:
     pass
   else:
-    client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin)
 
 @app.on_message(filters.command('rm'))
 async def ad(client,message):
   if message.from_user.id==owner:
     pass
   else:
-    client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin)
 
 @app.on_message(filters.command('ads'))
 async def ad(client,message):
   if message.from_user.id==owner:
     pass
   else:
-    client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin)
 
 @app.on_message()
 async def handler(client,message):
