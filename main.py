@@ -23,7 +23,7 @@ nonadmin="<b>Permission denied!</b>\n\n"
 
 ad_text="Put your ads here\n <a href='kun.uz'>Read more...</a>"
 
-entity = MessageEntity(type="blockquote", offset=0, length=len(ad_text))
+entity = MessageEntity(type="text_mention", offset=0, length=len(ad_text))
 
 def get_date(days_to_add):
     current_date = datetime.now()
