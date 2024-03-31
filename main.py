@@ -17,7 +17,7 @@ spot=Spot()
 
 CHANNEL_ID=-1002143083883
 
-async def price_alert(symbol, price, chat_id, client):
+async def price_alert(symbol, type_, price, chat_id, client):
   await client.send_message(chat_id=chat_id, text=f"✅ <b>Alert added</b>:\n{symbol.upper()} {price} USDT")
   while True:
     
@@ -25,15 +25,21 @@ async def price_alert(symbol, price, chat_id, client):
       symbol+='USDT'
     
     price=float(str(price).replace(',',''))
-    print(symbol)
+    
     url=f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"
     
     res=requests.get(url)
-    print(res)
+    
     if res.status_code==200:
       data=res.json()
-      print(float(data["price"]),1000000,price)
-      if float(data["price"])>=price:
+      
+      if type_="long" and float(data["price"])>=price:
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
+        break
+      if type_="short" and float(data["price"])<=price:
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
+        break
+      if type_="" and float(data["price"])==price:
         await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
 
@@ -50,10 +56,10 @@ async def start(client,message):
   except UserNotParticipant:
     await message.reply_text("Please join our channel and /start again to use bot.")
 
-@app.on_message(filters.command('set'))
+@app.on_message(filters.command('alert'))
 async def set_alert(client,message):
   message_text=message.text.split(' ')
-  asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message.chat.id,client))
+  asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message_text[3],message.chat.id,client))
 
 @app.on_message()
 async def handler(client,message):
