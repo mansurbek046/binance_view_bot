@@ -33,13 +33,13 @@ async def price_alert(symbol, type_, price, chat_id, client):
     if res.status_code==200:
       data=res.json()
       
-      if type_="long" and float(data["price"])>=price:
+      if type_=="long" and float(data["price"])>=price:
         await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
-      if type_="short" and float(data["price"])<=price:
+      if type_=="short" and float(data["price"])<=price:
         await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
-      if type_="" and float(data["price"])==price:
+      if type_=="" and float(data["price"])==price:
         await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
 
