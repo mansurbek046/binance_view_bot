@@ -18,7 +18,7 @@ spot=Spot()
 CHANNEL_ID=-1002143083883
 
 async def price_alert(symbol, type_, price, chat_id, client):
-  await client.send_message(chat_id=chat_id, text=f"✅ <b>Alert added</b>:\n`{symbol.upper()} {price} USDT` <b>{type_.upper()}</b>")
+  await client.send_message(chat_id=chat_id, text=f"✅ <b><u>{type_.upper()}</u> Alert added</b>:\n{symbol.upper()} {price} USDT")
   while True:
     
     if not symbol.endswith('USDT'):
@@ -35,13 +35,13 @@ async def price_alert(symbol, type_, price, chat_id, client):
       data=res.json()
       
       if type_=="long" and float(data["price"])>=price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n`{data['symbol']}: {float(data['price']):,.2f}`")
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
       if type_=="short" and float(data["price"])<=price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n`{data['symbol']}: {float(data['price']):,.2f}`")
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
       if type_=="" and float(data["price"])==price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n`{data['symbol']}: {float(data['price']):,.2f}`")
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
         break
 
     await asyncio.sleep(20)
@@ -103,7 +103,7 @@ async def handler(client,message):
             if change_percentage<0:
               status_icon=down
     
-            gift_text = f"<b>{symbol} Market\n\n💰 Price: `{price:,.2f}`\n{status_icon} 24H Change: `{change_percentage:.2f}%`\n⬆ High: `{high_price:,.2f}`\n⬇️ Low: `{low_price:,.2f}`\n📊 24H Volume: `{volume:,.2f}`</b>"
+            gift_text = f"<b>{symbol} Market\n\n💰 Price: {price:,.2f}\n{status_icon} 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}</b>"
 
             reply_markup=InlineKeyboardMarkup([[
               InlineKeyboardButton("💰 Binance", web_app=WebAppInfo(url=f"https://www.binance.com/en/trade/{currency}")),
