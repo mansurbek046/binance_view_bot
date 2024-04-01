@@ -31,7 +31,8 @@ def get_date(days_to_add):
     return future_date_str
 
 async def price_alert(symbol, type_, price, chat_id, client):
-  await client.send_message(chat_id=chat_id, text=f"✅ <b>Alert added</b>:\n{symbol.upper()} {price} USDT {get_add()}")
+  var_get_add=await get_add(client)
+  await client.send_message(chat_id=chat_id, text=f"✅ <b>Alert added</b>:\n{symbol.upper()} {price} USDT {var_get_add}")
   while True:
     
     if not symbol.endswith('USDT'):
@@ -48,13 +49,16 @@ async def price_alert(symbol, type_, price, chat_id, client):
       data=res.json()
       
       if type_=="long" and float(data["price"])>=price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {get_add()}")
+        var_get_add=await get_add(client)
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {var_get_add}")
         break
       if type_=="short" and float(data["price"])<=price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {get_add()}")
+        var_get_add=await get_add(client)
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {var_get_add}")
         break
       if type_=="" and float(data["price"])==price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {get_add()}")
+        var_get_add=await get_add(client)
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {var_get_add}")
         break
 
     await asyncio.sleep(20)
@@ -95,7 +99,7 @@ def rm_ad(channel):
         else:
             json.dump({}, file)
 
-def get_add(client,chat_id):
+async def get_add(client):
     ad_text = {}
     
     with open("ads.json", "r") as file:
@@ -149,9 +153,11 @@ async def set_alert(client,message):
     if message_text[2]=="short" or message_text[2]=="long" and isinstance(message_text[3],float):
       asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message_text[3],message.chat.id,client))
     else:
-      await client.send_message(chat_id=message.chat.id,text="<b>❌ Wrong using!</b>\nUsing example:\n/alert btc short 70001.42{get_add()}")
+      var_get_add=await get_add(client)
+      await client.send_message(chat_id=message.chat.id,text=f"<b>❌ Wrong using!</b>\nUsing example:\n/alert btc short 70001.42{var_get_add}")
   else:
-    await client.send_message(chat_id=message.chat.id,text="<b>❌ Wrong using!</b>\nUsing example:\n/alert btc short 70001.42{get_add()}")
+    var_get_add=await get_add(client)
+    await client.send_message(chat_id=message.chat.id,text=f"<b>❌ Wrong using!</b>\nUsing example:\n/alert btc short 70001.42{var_get_add}")
 
 @app.on_message(filters.command('ad'))
 async def ad(client,message):
@@ -161,9 +167,11 @@ async def ad(client,message):
       add_ad(message_text[0],message_text[1],message_text[2],message_text[3])
       await client.send_message(chat_id=message.chat.id, text="✅ Ad added!")
     else:
-      await client.send_message(chat_id=message.chat.id,text="❌ Wrong using! Using example:\n/ad 6266188888@#$2000@#$Hey this is ad...@#$@tlinkc{get_add()}")
+      var_get_add=await get_add(client)
+      await client.send_message(chat_id=message.chat.id,text=f"❌ Wrong using! Using example:\n/ad 6266188888@#$2000@#$Hey this is ad...@#$@tlinkc{var_get_add}")
   else:
-    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
+    var_get_add=await get_add(client)
+    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{var_get_add}")
 
 @app.on_message(filters.command('rm'))
 async def ad(client,message):
@@ -173,14 +181,16 @@ async def ad(client,message):
     if rm:
       await client.send_message(chat_id=message.chat.id,text="✅ Ad deleted!")
   else:
-    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
+    var_get_add=await get_add(client)
+    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{var_get_add}")
 
 @app.on_message(filters.command('ads'))
 async def ad(client,message):
   if message.from_user.id==owner:
     await client.send_message(chat_id=message.chat.id,text=list_ads())
   else:
-    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
+    var_get_add=await get_add(client)
+    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{var_get_add}")
 
 @app.on_message()
 async def handler(client,message):
@@ -229,8 +239,8 @@ async def handler(client,message):
               InlineKeyboardButton("💰 Binance", web_app=WebAppInfo(url=f"https://www.binance.com/en/trade/{currency}")),
               InlineKeyboardButton("TradingView 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}"))
               ]])
-    
-            await client.send_message(chat_id=message.chat.id,text=gift_text+get_add(),reply_markup=reply_markup)
+            var_get_add=await get_add(client)
+            await client.send_message(chat_id=message.chat.id,text=f"{gift_text}{var_get_add}",reply_markup=reply_markup)
 
   except UserNotParticipant:
     await message.reply_text("Please join our channel and /start again to use bot.")
