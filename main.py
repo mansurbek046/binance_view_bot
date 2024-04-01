@@ -18,8 +18,8 @@ spot=Spot()
 
 CHANNEL_ID=-1002143083883
 owner=6045995371
-nonadmin="<b>Permission denied!</b>\n\n<pre>Put your channel here</pre><a href='kun.uz'>Read more...</a>"
 
+nonadmin="<b>🙅Permission denied!</b>\n\n<pre>If you want to put here your channel username or ad.\nWrite  👇me</pre>@triple_link"
 
 def get_date(days_to_add):
     current_date = datetime.now()
