@@ -104,15 +104,15 @@ async def get_add(client):
     
     with open("ads.json", "r") as file:
         data = json.load(file)
+    if data:
+      key = random.choice(list(data.keys()))
+      ad_obj = data[key]
+      ad_text = f"\n\n<pre>{ad_obj['ad_content']}</pre>\n{ad_obj['link']}"
     
-    key = random.choice(list(data.keys()))
-    ad_obj = data[key]
-    ad_text = f"\n\n<pre>{ad_obj['ad_content']}</pre>\n{ad_obj['link']}"
-    
-    data[key]["view_count"] = int(data[key]["view_count"]) - 1
-    if data[key]["view_count"]==0:
-      await client.send_message(chat_id=data[key]["user_id"],text=f"🏁 Your ad closed! {ad_text}")
-      del data[key]
+      data[key]["view_count"] = int(data[key]["view_count"]) - 1
+      if data[key]["view_count"]==0:
+        await client.send_message(chat_id=data[key]["user_id"],text=f"🏁 Your ad closed! {ad_text}")
+        del data[key]
 
     with open("ads.json", "w") as file:
         if data:
