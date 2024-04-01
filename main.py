@@ -8,6 +8,7 @@ from pyrogram.errors import UserNotParticipant
 import asyncio
 from datetime import datetime, timedelta
 from pyrogram.types import MessageEntity
+from pyrogram.enums import MessageEntityType
 
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
@@ -23,7 +24,7 @@ nonadmin="<b>Permission denied!</b>\n\n"
 
 ad_text="Put your ads here\n <a href='kun.uz'>Read more...</a>"
 
-entity = MessageEntity(type="text_mention", offset=0, length=len(ad_text))
+entity = MessageEntity(type=MessageEntityType("BLOCKQUOTE", offset=0, length=len(ad_text))
 
 def get_date(days_to_add):
     current_date = datetime.now()
