@@ -19,7 +19,7 @@ spot=Spot()
 CHANNEL_ID=-1002143083883
 owner=6045995371
 
-nonadmin="<b>🙅 Permission denied!</b>\n\n<pre>If you want to put here your channel username or ad.\nWrite me 👇</pre>\n@triple_link"
+nonadmin="<b>🙅 Permission denied!</b>\n\n<pre>If you want to put here your channel username or ad.</pre>\n@triple_link"
 
 def get_date(days_to_add):
     current_date = datetime.now()
