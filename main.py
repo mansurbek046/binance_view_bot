@@ -59,7 +59,7 @@ async def price_alert(symbol, type_, price, chat_id, client):
 
     await asyncio.sleep(20)
 
-async def add_ad(user_id,view_count,ad_content,link="@test123"):
+def add_ad(user_id,view_count,ad_content,link="@test123"):
   with open("ads.json", "w+") as file:
     data=json.load(file)
     ad={
@@ -71,7 +71,7 @@ async def add_ad(user_id,view_count,ad_content,link="@test123"):
     data[len(data)+1]=ad
     json.dump(data, file)
 
-async def rm_ad(channel):
+def rm_ad(channel):
   with open("ads.json", "w+") as file:
     my_obj=json.load(file)
     field_to_check = "link"
@@ -83,7 +83,7 @@ async def rm_ad(channel):
     return True
   return False
 
-async def get_add():
+def get_add():
   ad_text={}
   with open("ads.json", "w+") as file:
       data=json.load(file)
@@ -94,7 +94,7 @@ async def get_add():
       json.dump(data, file)
   return ad_text
 
-async def list_ads():
+def list_ads():
   list_ads_text=""
   count=0
   with open("ads.json", "w+") as file:
