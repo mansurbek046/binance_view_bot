@@ -87,16 +87,15 @@ def rm_ad(channel):
     for key, inner_obj in list(my_obj.items()):  # Using list() to create a snapshot for modification
         if field_to_check in inner_obj and inner_obj[field_to_check] == value_to_check:
             del my_obj[key]
+            return True
     
     with open("ads.json", "w") as file:
         if my_obj:
             json.dump(my_obj, file)
         else:
             json.dump({}, file)
-    
-    return True
 
-def get_add():
+def get_add(client,chat_id):
     ad_text = {}
     
     with open("ads.json", "r") as file:
@@ -107,7 +106,10 @@ def get_add():
     ad_text = f"\n\n<pre>{ad_obj['ad_content']}</pre>\n{ad_obj['link']}"
     
     data[key]["view_count"] = int(data[key]["view_count"]) - 1
-    
+    if data[key]["view_count"]==0:
+      await client.send_message(chat_id=data[key]["user_id"],text=f"🏁 Your ad closed! {ad_text}")
+      del data[key]
+
     with open("ads.json", "w") as file:
         if data:
             json.dump(data, file)
@@ -144,17 +146,22 @@ async def start(client,message):
 async def set_alert(client,message):
   message_text=message.text.split(' ')
   if len(message_text)==4:
-    asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message_text[3],message.chat.id,client))
+    if message_text[2]=="short" or message_text[2]=="long" and isinstance(message_text[3],float):
+      asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message_text[3],message.chat.id,client))
+    else:
+      await client.send_message(chat_id=message.chat.id,text="<b>❌ Wrong using!</b>\nUsing example:\n/alert btc short 70001.42{get_add()}")
   else:
-    await client.send_message(chat_id=message.chat.id,text="❌ Wrong using! {get_add()}")
+    await client.send_message(chat_id=message.chat.id,text="<b>❌ Wrong using!</b>\nUsing example:\n/alert btc short 70001.42{get_add()}")
 
 @app.on_message(filters.command('ad'))
 async def ad(client,message):
   if message.from_user.id==owner:
     message_text=message.text.split("@#$")
-    
-    add_ad(message_text[0],message_text[1],message_text[2],message_text[3])
-    await client.send_message(chat_id=message.chat.id, text="✅ Ad added!")
+    if len(message_text)==4:
+      add_ad(message_text[0],message_text[1],message_text[2],message_text[3])
+      await client.send_message(chat_id=message.chat.id, text="✅ Ad added!")
+    else:
+      await client.send_message(chat_id=message.chat.id,text="❌ Wrong using! Using example:\n/ad 6266188888@#$2000@#$Hey this is ad...@#$@tlinkc{get_add()}")
   else:
     await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
 
