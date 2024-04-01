@@ -61,6 +61,7 @@ async def price_alert(symbol, type_, price, chat_id, client):
 
 def add_ad(user_id,view_count,ad_content,link="@test123"):
   with open("ads.json", "w+") as file:
+    file.seek(0)
     data=json.load(file)
     ad={
       "user_id":user_id,
@@ -76,6 +77,7 @@ def add_ad(user_id,view_count,ad_content,link="@test123"):
 
 def rm_ad(channel):
   with open("ads.json", "w+") as file:
+    file.seek(0)
     my_obj=json.load(file)
     field_to_check = "link"
     value_to_check = channel
@@ -92,6 +94,7 @@ def rm_ad(channel):
 def get_add():
   ad_text={}
   with open("ads.json", "w+") as file:
+      file.seek(0)
       data=json.load(file)
       key=random.choice(data.keys())
       ad_obj=data[key]
