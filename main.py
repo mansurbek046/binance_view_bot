@@ -107,12 +107,12 @@ def get_add():
 def list_ads():
   list_ads_text=""
   count=0
-  with open("ads.json", "w+") as file:
+  with open("ads.json", "r") as file:
         data=json.load(file)
-        for key, value in data:
-          link=data["link"]
+        for key, value in data.items():
+          link=value["link"]
           if link.startswith("@") or link.startswith("t.me/"):
-            list_ads_text+link+"\n"
+            list_ads_text+=link+"\n"
             count+=1
   return f"{list_ads_text}\nChannel count: {count}"
 
