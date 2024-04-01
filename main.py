@@ -134,7 +134,7 @@ async def ad(client,message):
     add_ad(message_text[0],message_text[1],message_text[2],message_text[3])
     await client.send_message(chat_id=message.chat.id, text="✅ Ad added!")
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin+get_add())
+    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
 
 @app.on_message(filters.command('rm'))
 async def ad(client,message):
@@ -144,14 +144,14 @@ async def ad(client,message):
     if rm:
       client.send_message(chat_id=message.chat.id,text="✅ Ad deleted!")
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin+get_add())
+    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
 
 @app.on_message(filters.command('ads'))
 async def ad(client,message):
   if message.from_user.id==owner:
     client.send_message(chat_id=message.chat.id,text=list_ads())
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin+get_add())
+    await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
 
 @app.on_message()
 async def handler(client,message):
