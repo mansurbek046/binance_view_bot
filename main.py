@@ -134,7 +134,7 @@ async def set_alert(client,message):
   if len(message_text)==4:
     asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message_text[3],message.chat.id,client))
   else:
-    client.send_message(chat_id=message.chat.id,text="❌ Wrong using! {get_add()}")
+    await client.send_message(chat_id=message.chat.id,text="❌ Wrong using! {get_add()}")
 
 @app.on_message(filters.command('ad'))
 async def ad(client,message):
@@ -152,14 +152,14 @@ async def ad(client,message):
     message_text=message.text.split(" ")
     rm=rm_ad(message_text[1])
     if rm:
-      client.send_message(chat_id=message.chat.id,text="✅ Ad deleted!")
+      await client.send_message(chat_id=message.chat.id,text="✅ Ad deleted!")
   else:
     await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
 
 @app.on_message(filters.command('ads'))
 async def ad(client,message):
   if message.from_user.id==owner:
-    client.send_message(chat_id=message.chat.id,text=list_ads())
+    await client.send_message(chat_id=message.chat.id,text=list_ads())
   else:
     await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{get_add()}")
 
