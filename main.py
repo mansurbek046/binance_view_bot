@@ -18,7 +18,7 @@ spot=Spot()
 
 CHANNEL_ID=-1002143083883
 owner=6045995371
-nonadmin="<b>Permission denied!</b>\n\n<a href='kun.uz'>Put your ads here\nRead more... @oszayn</a>"
+nonadmin="<b>Permission denied!</b>\n\n<pre>Put your channel here</pre><a href='kun.uz'>Read more...</a>"
 
 
 def get_date(days_to_add):
@@ -77,14 +77,7 @@ async def ad(client,message):
   if message.from_user.id==owner:
     pass
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin, entities=[
-                    {
-                        "_": "MessageEntity",
-                        "type": "MessageEntityType.BLOCKQUOTE",
-                        "offset": 0,
-                        "length": 15,
-                        "text": "jdjdjdjdjxjddjdjddjdjdj\njsjdjdj"
-                    }])
+    await client.send_message(chat_id=message.chat.id, text=nonadmin)
 
 @app.on_message(filters.command('rm'))
 async def ad(client,message):
