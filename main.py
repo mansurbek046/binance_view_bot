@@ -59,53 +59,62 @@ async def price_alert(symbol, type_, price, chat_id, client):
 
     await asyncio.sleep(20)
 
-def add_ad(user_id,view_count,ad_content,link="@test123"):
-  with open("ads.json", "w+") as file:
-    file.seek(0)
-    data=json.load(file)
-    ad={
-      "user_id":user_id,
-      "view_count":view_count,
-      "ad_content":ad_content,
-      "link":link
+def add_ad(user_id, view_count, ad_content, link="@test123"):
+    with open("ads.json", "r") as file:
+        data = json.load(file)
+    
+    ad = {
+        "user_id": user_id,
+        "view_count": view_count,
+        "ad_content": ad_content,
+        "link": link
     }
-    data[len(data)+1]=ad
-    if data:
-      json.dump(data, file)
-    else:
-      json.dump({}, file)
+    
+    with open("ads.json", "w") as file:
+        data[len(data) + 1] = ad
+        if data:
+            json.dump(data, file)
+        else:
+            json.dump({}, file)
 
 def rm_ad(channel):
-  with open("ads.json", "w+") as file:
-    file.seek(0)
-    my_obj=json.load(file)
+    with open("ads.json", "r") as file:
+        my_obj = json.load(file)
+    
     field_to_check = "link"
     value_to_check = channel
+    
     for key, inner_obj in list(my_obj.items()):  # Using list() to create a snapshot for modification
         if field_to_check in inner_obj and inner_obj[field_to_check] == value_to_check:
             del my_obj[key]
-    if my_obj:
-      json.dump(my_obj, file)
-    else:
-      json.dump({}, file)
+    
+    with open("ads.json", "w") as file:
+        if my_obj:
+            json.dump(my_obj, file)
+        else:
+            json.dump({}, file)
+    
     return True
-  return False
 
 def get_add():
-  ad_text={}
-  with open("ads.json", "w+") as file:
-      file.seek(0)
-      data=json.load(file)
-      key=random.choice(data.keys())
-      ad_obj=data[key]
-      ad_text=f"\n\n<pre>{ad_obj['ad_content']}</pre>\n{ad_obj['link']}"
-      data[key]["view_count"]=int(data[key]["view_count"])-1
-      if data:
-        json.dump(data, file)
-      else:
-        json.dump({}, file)
-
-  return ad_text
+    ad_text = {}
+    
+    with open("ads.json", "r") as file:
+        data = json.load(file)
+    
+    key = random.choice(list(data.keys()))
+    ad_obj = data[key]
+    ad_text = f"\n\n<pre>{ad_obj['ad_content']}</pre>\n{ad_obj['link']}"
+    
+    data[key]["view_count"] = int(data[key]["view_count"]) - 1
+    
+    with open("ads.json", "w") as file:
+        if data:
+            json.dump(data, file)
+        else:
+            json.dump({}, file)
+    
+    return ad_text
 
 def list_ads():
   list_ads_text=""
