@@ -7,20 +7,23 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInf
 from pyrogram.errors import UserNotParticipant
 import asyncio
 from datetime import datetime, timedelta
+import random
 
+#const vars
 api_id='20619129'
 api_hash='b4edb93608b3fc73cfa412ce538d4882'
-
 bot_token='7074408130:AAHrKKZend7i3PUBjI3sr2bW4iVPDZvFJ18'
-
-app=Client('binance_view_bot',api_hash=api_hash,api_id=api_id,bot_token=bot_token)
-spot=Spot()
-
 CHANNEL_ID=-1002143083883
 owner=6045995371
 
-nonadmin="<b>🙅 Permission denied!</b>\n\n<pre>If you want to put here your channel username or ad.</pre>\n@triple_link"
+#main
+app=Client('binance_view_bot',api_hash=api_hash,api_id=api_id,bot_token=bot_token)
+spot=Spot()
 
+#repetatives
+nonadmin="<b>🙅 Permission denied!</b>"
+
+#functions
 def get_date(days_to_add):
     current_date = datetime.now()
     future_date = current_date + timedelta(days=days_to_add)
@@ -28,7 +31,7 @@ def get_date(days_to_add):
     return future_date_str
 
 async def price_alert(symbol, type_, price, chat_id, client):
-  await client.send_message(chat_id=chat_id, text=f"✅ <b>Alert added</b>:\n{symbol.upper()} {price} USDT")
+  await client.send_message(chat_id=chat_id, text=f"✅ <b>Alert added</b>:\n{symbol.upper()} {price} USDT {get_add()}")
   while True:
     
     if not symbol.endswith('USDT'):
@@ -45,17 +48,65 @@ async def price_alert(symbol, type_, price, chat_id, client):
       data=res.json()
       
       if type_=="long" and float(data["price"])>=price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {get_add()}")
         break
       if type_=="short" and float(data["price"])<=price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {get_add()}")
         break
       if type_=="" and float(data["price"])==price:
-        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f}")
+        await client.send_message(chat_id=chat_id, text=f"<b>⚠ Alert</b>\n{data['symbol']}: {float(data['price']):,.2f} {get_add()}")
         break
 
     await asyncio.sleep(20)
 
+async def add_ad(user_id,view_count,ad_content,link="@test123"):
+  with open("ads.json", "w+") as file:
+    data=json.load(file)
+    ad={
+      "user_id":user_id,
+      "view_count":view_count,
+      "ad_content":ad_content,
+      "link":link
+    }
+    data[len(data)+1]=ad
+    json.dump(data, file)
+
+async def rm_ad(channel):
+  with open("ads.json", "w+") as file:
+    my_obj=json.load(file)
+    field_to_check = "link"
+    value_to_check = channel
+    for key, inner_obj in list(my_obj.items()):  # Using list() to create a snapshot for modification
+        if field_to_check in inner_obj and inner_obj[field_to_check] == value_to_check:
+            del my_obj[key]
+    json.dump(my_obj, file)
+    return True
+  return False
+
+async def get_add():
+  ad_text={}
+  with open("ads.json", "w+") as file:
+      data=json.load(file)
+      key=random.choice(data.keys())
+      ad_obj=data[key]
+      ad_text=f"\n\n<pre>{ad_obj['ad_content']}</pre>\n{ad_obj['link']}"
+      data[key]["view_count"]=int(data[key]["view_count"])-1
+      json.dump(data, file)
+  return ad_text
+
+async def list_ads():
+  list_ads_text=""
+  count=0
+  with open("ads.json", "w+") as file:
+        data=json.load(file)
+        for key, value in data:
+          link=data["link"]
+          if link.startswith("@") or link.startswith("t.me/"):
+            list_ads_text+link+"\n"
+            count+=1
+  return f"{list_ads_text}\nChannel count: {count}"
+
+#on_message
 @app.on_message(filters.command('start'))
 async def start(client,message):
   try:
@@ -70,28 +121,37 @@ async def start(client,message):
 @app.on_message(filters.command('alert'))
 async def set_alert(client,message):
   message_text=message.text.split(' ')
-  asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message_text[3],message.chat.id,client))
+  if len(message_text)==4:
+    asyncio.create_task(price_alert(message_text[1].upper(),message_text[2],message_text[3],message.chat.id,client))
+  else:
+    client.send_message(chat_id=message.chat.id,text="❌ Wrong using! {get_add()}")
 
 @app.on_message(filters.command('ad'))
 async def ad(client,message):
   if message.from_user.id==owner:
-    pass
+    message_text=message.text.split("@#$")
+    
+    add_ad(message_text[0],message_text[1],message_text[2],message_text[3])
+    await client.send_message(chat_id=message.chat.id, text="✅ Ad added!")
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin+get_add())
 
 @app.on_message(filters.command('rm'))
 async def ad(client,message):
   if message.from_user.id==owner:
-    pass
+    message_text=message.text.split(" ")
+    rm=rm_ad(message_text[1])
+    if rm:
+      client.send_message(chat_id=message.chat.id,text="✅ Ad deleted!")
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin+get_add())
 
 @app.on_message(filters.command('ads'))
 async def ad(client,message):
   if message.from_user.id==owner:
-    pass
+    client.send_message(chat_id=message.chat.id,text=list_ads())
   else:
-    await client.send_message(chat_id=message.chat.id, text=nonadmin)
+    await client.send_message(chat_id=message.chat.id, text=nonadmin+get_add())
 
 @app.on_message()
 async def handler(client,message):
@@ -141,14 +201,10 @@ async def handler(client,message):
               InlineKeyboardButton("TradingView 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}"))
               ]])
     
-            await client.send_message(chat_id=message.chat.id,text=gift_text,reply_markup=reply_markup)
+            await client.send_message(chat_id=message.chat.id,text=gift_text+get_add(),reply_markup=reply_markup)
 
   except UserNotParticipant:
     await message.reply_text("Please join our channel and /start again to use bot.")
 
-
-
-
 if __name__=="__main__":
   app.run()
-
