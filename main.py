@@ -18,7 +18,7 @@ spot=Spot()
 
 CHANNEL_ID=-1002143083883
 owner=6045995371
-nonadmin="<b><blockquote>Permission denied!</blockquote></b>\n\n<a href='kun.uz'><pre>Put your ads here\nRead more... @oszayn</pre></a>"
+nonadmin="<b><blockquote>Permission denied!</b>\n\n<a href='kun.uz'><pre>Put your ads here\nRead more... @oszayn</pre></a>"
 
 
 def get_date(days_to_add):
