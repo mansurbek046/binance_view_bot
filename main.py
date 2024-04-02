@@ -139,11 +139,17 @@ def list_ads():
 @app.on_message(filters.command('start'))
 async def start(client,message):
   try:
+    with open("users.json", "r") as file:
+      data=list(json.load(file))
+    with open("users.json","w") as file:
+      data.append(message.from_user.id)
+      data=list(set(data))
+      json.dump(data)
     member=await client.get_chat_member(CHANNEL_ID, message.from_user.id)
     if not member.status!="ChatMemberStatus.MEMBER":
       await message.reply_text("Please join our channel and /start again to use bot.")
     else:
-      await client.send_message(chat_id=message.chat.id,text="Send me coin name..")
+      await client.send_message(chat_id=message.chat.id,text="Send me coin name, please...")
   except UserNotParticipant:
     await message.reply_text("Please join our channel and /start again to use bot.")
 
@@ -192,6 +198,15 @@ async def ad(client,message):
   else:
     var_get_add=await get_add(client) or ""
     await client.send_message(chat_id=message.chat.id, text=f"{nonadmin}{var_get_add}")
+
+@app.on_message(filters.command('send'))
+async def send(client,message):
+  with open("users.json","r") as file:
+    data=list(json.load(file))
+    message_text=message.text.split("/send ")
+    for user_id in data:
+      client.send_message(chat_id=user_id,text=message_text)
+    
 
 @app.on_message()
 async def handler(client,message):
