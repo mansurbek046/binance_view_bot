@@ -205,7 +205,7 @@ async def send(client,message):
     data=list(json.load(file))
     message_text=message.text.split("/send ")
     for user_id in data:
-      await client.send_message(chat_id=user_id,text=message_text)
+      await client.send_message(chat_id=user_id,text=message_text[1])
     
 
 @app.on_message()
