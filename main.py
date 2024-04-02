@@ -249,8 +249,7 @@ async def handler(client,message):
             if change_percentage<0:
               status_icon=down
     
-            gift_text = f"<b>{symbol} Market\n\n💰 Price: {price:,.2f} USDT\n{status_icon} 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f} USDT\n⬇️ Low: {low_price:,.2f} USDT\n📊 24H Vol: {volume:,.2f} USDT</a>\n\n<a href='https://www.binance.com/en/trade/{currency}'>💰 Binance</a> | <a href='https://www.tradingview.com/symbols/{currency}'>TradingView 📊</a>"
-
+            gift_text = f"<b>{symbol} Market\n\n💰 Price: {price:,.2f} USDT\n{status_icon} 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f} USDT\n⬇️ Low: {low_price:,.2f} USDT\n📊 24H Vol: {volume:,.2f} USDT</a></b>\n\n<a href='https://www.binance.com/en/trade/{currency}'>💰 Binance</a> | <a href='https://www.tradingview.com/symbols/{currency}'>TradingView 📊</a>"
             if message.chat.type=="ChatType.GROUP":
               print("group")
               var_get_add=await get_add(client) or ""
