@@ -111,7 +111,8 @@ async def get_add(client):
     
       data[key]["view_count"] = int(data[key]["view_count"]) - 1
       if data[key]["view_count"]==0:
-        await client.send_message(chat_id=data[key]["user_id"],text=f"🏁 Your ad closed! {ad_text}")
+        print(data[key]["user_id"])
+        await client.send_message(chat_id=int(data[key]["user_id"]),text=f"🏁 Your ad closed! {ad_text}")
         del data[key]
 
     with open("ads.json", "w") as file:
