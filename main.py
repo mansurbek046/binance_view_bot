@@ -107,7 +107,7 @@ async def get_add(client):
     if data:
       key = random.choice(list(data.keys()))
       ad_obj = data[key]
-      ad_text = f"\n\n<pre>{ad_obj['ad_content']}</pre>\n{ad_obj['link']}"
+      ad_text = f"\n\n<pre>{ad_obj['ad_content']}</pre>\n👉 {ad_obj['link']}"
     
       data[key]["view_count"] = int(data[key]["view_count"]) - 1
       if data[key]["view_count"]==0:
