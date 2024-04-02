@@ -211,7 +211,6 @@ async def send(client,message):
 @app.on_message()
 async def handler(client,message):
   try:
-    print(message)
     member=await client.get_chat_member(CHANNEL_ID, message.from_user.id)
     
     if not member.status!="ChatMemberStatus.MEMBER":
@@ -252,11 +251,16 @@ async def handler(client,message):
     
             gift_text = f"<b>{symbol} Market\n\n💰 Price: {price:,.2f}\n{status_icon} 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f}\n⬇️ Low: {low_price:,.2f}\n📊 24H Volume: {volume:,.2f}</b>"
 
-            # if message.chat.type=="":
-            reply_markup=InlineKeyboardMarkup([[
-              InlineKeyboardButton("💰 Binance", web_app=WebAppInfo(url=f"https://www.binance.com/en/trade/{currency}")),
-              InlineKeyboardButton("TradingView 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}"))
-              ]])
+            if message.chat.type=="ChatType.GROUP":
+              reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("💰 Binance", url=f"https://www.binance.com/en/trade/{currency}"),
+                InlineKeyboardButton("TradingView 📊", url=f"https://www.tradingview.com/symbols/{currency}")
+                ]])
+            else:  
+              reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("💰 Binance", web_app=WebAppInfo(url=f"https://www.binance.com/en/trade/{currency}")),
+                InlineKeyboardButton("TradingView 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}"))
+                ]])
             var_get_add=await get_add(client) or ""
             await client.send_message(chat_id=message.chat.id,text=f"{gift_text}{var_get_add}",reply_markup=reply_markup)
 
