@@ -252,7 +252,7 @@ async def handler(client,message):
             gift_text = f"<b>{symbol} Market\n\n💰 Price: {price:,.2f} USDT\n{status_icon} 24H Change: {change_percentage:.2f}%\n⬆ High: {high_price:,.2f} USDT\n⬇️ Low: {low_price:,.2f} USDT\n📊 24H Vol: {volume:,.2f} USDT</a></b>\n\n<a href='https://www.binance.com/en/trade/{currency}'>💰 Binance</a> | <a href='https://www.tradingview.com/symbols/{currency}'>TradingView 📊</a>"
             
             if str(message.chat.type)=="ChatType.GROUP":
-              print("GROUP")
+              
               var_get_add=await get_add(client) or ""
               await client.send_message(chat_id=message.chat.id,text=f"{gift_text}{var_get_add}",disable_web_page_preview=True)
             else:
