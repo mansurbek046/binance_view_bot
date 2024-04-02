@@ -139,6 +139,7 @@ def list_ads():
 @app.on_message(filters.command('start'))
 async def start(client,message):
   try:
+    print(message)
     with open("users.json", "r") as file:
       data=list(json.load(file))
     with open("users.json","w") as file:
