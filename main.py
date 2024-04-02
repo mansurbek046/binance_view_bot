@@ -208,8 +208,8 @@ async def send(client,message):
       await client.send_message(chat_id=user_id,text=message_text[1])
 
 @app.on_message(filters.command('donate'))
-async def donate(cluent,message):
-  cluent.send_message(chat_id=message.chat.id,text="<b>Donate with:</b>\n\n💎 TON:\n`UQDcKDC6iPEosN5e8PRHp7gXxK2KnEgMZjWj8Wyazhvfh8eD`\n💰 USDT:\n`TM2DEqLhBZFuCv1NSx9ftoGESUPvhaSe6Q`\n🪙 BTC:\n`1BDtumr5qNsgvauwG8NSkmkGD9Hxuxt3br`") 
+async def donate(client,message):
+  await client.send_message(chat_id=message.chat.id,text="<b>Donate with:</b>\n\n💎 TON:\n`UQDcKDC6iPEosN5e8PRHp7gXxK2KnEgMZjWj8Wyazhvfh8eD`\n💰 USDT:\n`TM2DEqLhBZFuCv1NSx9ftoGESUPvhaSe6Q`\n🪙 BTC:\n`1BDtumr5qNsgvauwG8NSkmkGD9Hxuxt3br`") 
 
 @app.on_message()
 async def handler(client,message):
