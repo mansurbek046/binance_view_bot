@@ -147,11 +147,11 @@ async def start(client,message):
       json.dump(data,file)
     member=await client.get_chat_member(CHANNEL_ID, message.from_user.id)
     if not member.status!="ChatMemberStatus.MEMBER":
-      await message.reply_text("Please join our channel and /start again to use bot.")
+      await message.reply_text("Please join our channel @crypto_pencil and /start again to use bot.")
     else:
       await client.send_message(chat_id=message.chat.id,text="Send me coin name, please...")
   except UserNotParticipant:
-    await message.reply_text("Please join our channel and /start again to use bot.")
+    await message.reply_text("Please join our channel @crypto_pencil and /start again to use bot.")
 
 @app.on_message(filters.command('alert'))
 async def set_alert(client,message):
@@ -217,7 +217,7 @@ async def handler(client,message):
     member=await client.get_chat_member(CHANNEL_ID, message.from_user.id)
     
     if not member.status!="ChatMemberStatus.MEMBER":
-      await message.reply_text("Please join our channel and /start again to use bot.")
+      await message.reply_text("Please join our channel @crypto_pencil and /start again to use bot.")
     else:
       message_text=message.text
       gift_text=""
