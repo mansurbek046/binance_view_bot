@@ -68,7 +68,7 @@ def add_ad(user_id, view_count, ad_content, link="@test123"):
         data = json.load(file)
     
     ad = {
-        "user_id": user_id,
+        "user_id": user_id.split(' ')[1],
         "view_count": view_count,
         "ad_content": ad_content,
         "link": link
