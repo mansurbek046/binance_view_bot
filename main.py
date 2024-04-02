@@ -255,7 +255,8 @@ async def handler(client,message):
               print("GROUP")
               var_get_add=await get_add(client) or ""
               await client.send_message(chat_id=message.chat.id,text=f"{gift_text}{var_get_add}")
-            elif message.chat.type=="ChatType.PRIVATE":
+              return None
+            else:
               reply_markup=InlineKeyboardMarkup([[
                 InlineKeyboardButton("💰 Binance", web_app=WebAppInfo(url=f"https://www.binance.com/en/trade/{currency}")),
                 InlineKeyboardButton("TradingView 📊", web_app=WebAppInfo(url=f"https://www.tradingview.com/symbols/{currency}"))
