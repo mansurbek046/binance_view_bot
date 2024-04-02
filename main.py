@@ -139,13 +139,12 @@ def list_ads():
 @app.on_message(filters.command('start'))
 async def start(client,message):
   try:
-    print(message)
     with open("users.json", "r") as file:
       data=list(json.load(file))
     with open("users.json","w") as file:
       data.append(message.from_user.id)
       data=list(set(data))
-      json.dump(data)
+      json.dump(data,file)
     member=await client.get_chat_member(CHANNEL_ID, message.from_user.id)
     if not member.status!="ChatMemberStatus.MEMBER":
       await message.reply_text("Please join our channel and /start again to use bot.")
